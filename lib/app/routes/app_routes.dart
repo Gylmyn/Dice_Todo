@@ -6,10 +6,14 @@ abstract class Routes {
   Routes._();
   static const HOME = _Paths.HOME;
   static const SETTINGS = _Paths.SETTINGS;
+  static const FLANGUAGE = _Paths.FLANGUAGE;
+  static const FFONT = _Paths.FFONT;
 }
 
 abstract class _Paths {
   _Paths._();
   static const HOME = '/home';
   static const SETTINGS = '/settings';
+  static const FLANGUAGE = '$SETTINGS/language';
+  static const FFONT = '$SETTINGS/font';
 }

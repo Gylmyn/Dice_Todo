@@ -28,179 +28,8 @@ class HomeView extends GetView<HomeController> {
     }
 
     return Scaffold(
-        drawer: Drawer(
-          width: 320,
-          shape: const BeveledRectangleBorder(),
-          child: Obx(() => ListView(
-                children: [
-                  const Gap(12),
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 16),
-                    decoration: BoxDecoration(
-                      color: themeC.isDarkMode.value
-                          ? Colors.grey.shade900
-                          : Colors.grey.shade300,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Center(
-                      child: Image.asset('assets/logo-img.png'),
-                    ),
-                  ),
-                  const Gap(12),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(24),
-                        decoration: BoxDecoration(
-                          color: themeC.isDarkMode.value
-                              ? Colors.grey.shade900
-                              : Colors.grey.shade300,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Column(
-                          children: [
-                            const Icon(
-                              Icons.calendar_month_sharp,
-                              size: 64,
-                            ),
-                            Text(DateTimeUtils.getCurrentDay(),
-                                style: TextStyle(
-                                    color: themeC.isDarkMode.value
-                                        ? Colors.grey.shade300
-                                        : Colors.grey.shade900,
-                                    fontWeight: FontWeight.bold)),
-                            Text(DateTimeUtils.getCurrentDate(),
-                                style: TextStyle(
-                                    color: themeC.isDarkMode.value
-                                        ? Colors.grey.shade300
-                                        : Colors.grey.shade900,
-                                    fontWeight: FontWeight.bold)),
-                          ],
-                        ),
-                      ),
-                      // const Spacer(),
-                      const Gap(14),
-                      Container(
-                        padding: const EdgeInsets.all(24),
-                        decoration: BoxDecoration(
-                          color: themeC.isDarkMode.value
-                              ? Colors.grey.shade900
-                              : Colors.grey.shade300,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Column(
-                          children: [
-                            const Icon(
-                              Icons.access_time_filled_sharp,
-                              size: 64,
-                            ),
-                            Text(DateTimeUtils.getCurrentDay(),
-                                style: TextStyle(
-                                    color: themeC.isDarkMode.value
-                                        ? Colors.grey.shade300
-                                        : Colors.grey.shade900,
-                                    fontWeight: FontWeight.bold)),
-                            Obx(() => Text(controller.currentTime.value,
-                                style: TextStyle(
-                                    color: themeC.isDarkMode.value
-                                        ? Colors.grey.shade300
-                                        : Colors.grey.shade900,
-                                    fontWeight: FontWeight.bold))),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  const Gap(12),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      GestureDetector(
-                        onTap: () => Get.toNamed(Routes.SETTINGS),
-                        child: Container(
-                          padding: const EdgeInsets.all(24),
-                          decoration: BoxDecoration(
-                            color: themeC.isDarkMode.value
-                                ? Colors.grey.shade900
-                                : Colors.grey.shade300,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Column(
-                            children: [
-                              const Icon(
-                                Icons.settings_sharp,
-                                size: 64,
-                              ),
-                              Text('Settings',
-                                  style: TextStyle(
-                                      color: themeC.isDarkMode.value
-                                          ? Colors.grey.shade300
-                                          : Colors.grey.shade900,
-                                      fontWeight: FontWeight.bold)),
-                              Text('----------',
-                                  style: TextStyle(
-                                      color: themeC.isDarkMode.value
-                                          ? Colors.grey.shade300
-                                          : Colors.grey.shade900,
-                                      fontWeight: FontWeight.bold)),
-                            ],
-                          ),
-                        ),
-                      ),
-                      // const Spacer(),
-                      const Gap(14),
-                      GestureDetector(
-                        onTap: () => controller.exitApp(),
-                        child: Container(
-                          padding: const EdgeInsets.all(24),
-                          decoration: BoxDecoration(
-                            color: themeC.isDarkMode.value
-                                ? Colors.grey.shade900
-                                : Colors.grey.shade300,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Column(
-                            children: [
-                              const Icon(
-                                Icons.exit_to_app_rounded,
-                                size: 64,
-                              ),
-                              Text('Exit the App',
-                                  style: TextStyle(
-                                      color: themeC.isDarkMode.value
-                                          ? Colors.grey.shade300
-                                          : Colors.grey.shade900,
-                                      fontWeight: FontWeight.bold)),
-                              Text('----------',
-                                  style: TextStyle(
-                                      color: themeC.isDarkMode.value
-                                          ? Colors.grey.shade300
-                                          : Colors.grey.shade900,
-                                      fontWeight: FontWeight.bold)),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              )),
-        ),
-        appBar: AppBar(
-          title: const Text('DiceTodo'),
-          centerTitle: true,
-          actions: [
-            IconButton(
-              icon: Obx(() => Icon(themeC.isDarkMode.value
-                  ? Icons.dark_mode
-                  : Icons.light_mode)),
-              onPressed: () {
-                themeC.toggleTheme();
-              },
-            ),
-          ],
-        ),
+        drawer: _buildDrawer(themeC, controller),
+        appBar: _buildAppBar(themeC),
         body: Obx(() => ListView.builder(
               itemCount: controller.toDoList.length,
               itemBuilder: (context, index) {
@@ -217,4 +46,157 @@ class HomeView extends GetView<HomeController> {
           child: const Icon(Icons.add),
         ));
   }
+}
+
+AppBar _buildAppBar(ThemeController themeC) {
+  return AppBar(
+    title: const Text('DiceTodo'),
+    centerTitle: true,
+    actions: [
+      IconButton(
+        icon: Obx(() =>
+            Icon(themeC.isDarkMode.value ? Icons.dark_mode : Icons.light_mode)),
+        onPressed: () {
+          themeC.toggleTheme();
+        },
+      ),
+    ],
+  );
+}
+
+Drawer _buildDrawer(ThemeController themeC, HomeController controller) {
+  return Drawer(
+    width: 320,
+    shape: const BeveledRectangleBorder(),
+    child: Obx(() => ListView(
+          children: [
+            const Gap(12),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 16),
+              decoration: BoxDecoration(
+                color: themeC.isDarkMode.value
+                    ? Colors.grey.shade900
+                    : Colors.grey.shade300,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Center(
+                child: Image.asset('assets/logo-img.png'),
+              ),
+            ),
+            const Gap(12),
+            SizedBox(
+              height: 160,
+              child: GridView(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2, crossAxisSpacing: 6),
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(left: 16),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 24, horizontal: 20),
+                    decoration: BoxDecoration(
+                      color: themeC.isDarkMode.value
+                          ? Colors.grey.shade900
+                          : Colors.grey.shade300,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Column(
+                      children: [
+                        const Icon(
+                          Icons.calendar_month_sharp,
+                          size: 60,
+                        ),
+                        const Gap(6),
+                        Text('calender'.tr,
+                            style: TextStyle(
+                                color: themeC.isDarkMode.value
+                                    ? Colors.grey.shade300
+                                    : Colors.grey.shade900,
+                                fontSize: 20)),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(right: 16),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 24, horizontal: 20),
+                    decoration: BoxDecoration(
+                      color: themeC.isDarkMode.value
+                          ? Colors.grey.shade900
+                          : Colors.grey.shade300,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Column(
+                      children: [
+                        const Icon(
+                          Icons.access_time_filled_sharp,
+                          size: 60,
+                        ),
+                        const Gap(6),
+                        Text('clock'.tr,
+                            style: TextStyle(
+                                color: themeC.isDarkMode.value
+                                    ? Colors.grey.shade300
+                                    : Colors.grey.shade900,
+                                fontSize: 20)),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Gap(12),
+            GestureDetector(
+              onTap: () => Get.toNamed(Routes.SETTINGS),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: themeC.isDarkMode.value
+                      ? Colors.grey.shade900
+                      : Colors.grey.shade300,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                margin: const EdgeInsets.symmetric(horizontal: 16),
+                child: ListTile(
+                  leading: const Icon(
+                    Icons.settings_sharp,
+                    size: 24,
+                  ),
+                  trailing: const Icon(
+                    Icons.arrow_forward_sharp,
+                    size: 24,
+                  ),
+                  title: Text('settings'.tr),
+                ),
+              ),
+            ),
+            const Gap(12),
+            GestureDetector(
+              onTap: () => controller.exitApp(),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: themeC.isDarkMode.value
+                      ? Colors.grey.shade900
+                      : Colors.grey.shade300,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                margin: const EdgeInsets.symmetric(horizontal: 16),
+                child: ListTile(
+                  leading: const Icon(
+                    Icons.sensor_door_rounded,
+                    size: 24,
+                  ),
+                  trailing: const Icon(
+                    Icons.arrow_forward_sharp,
+                    size: 24,
+                  ),
+                  title: Text('exit'.tr),
+                ),
+              ),
+            ),
+            const Gap(12),
+          ],
+        )),
+  );
 }

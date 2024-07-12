@@ -2,6 +2,7 @@ import 'package:dice_todo/app/modules/settings/controllers/setting_controller.da
 import 'package:dice_todo/app/utils/snackbar/snackbar.dart';
 import 'package:dice_todo/app/utils/theme/controller.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 class FFontView extends GetView<SettingController> {
@@ -32,7 +33,7 @@ class FFontView extends GetView<SettingController> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Obx(() => Text(
-                        'Preview Font : ${themeC.selectedFont.value}',
+                        '${'preview'.tr} Font : ${themeC.selectedFont.value}',
                         style: TextStyle(
                           fontSize: 16,
                           color: themeC.isDarkMode.value
@@ -40,8 +41,9 @@ class FFontView extends GetView<SettingController> {
                               : Colors.grey.shade900,
                         ),
                       )),
+                  const Gap(4),
                   Text(
-                    '< Hallo World />',
+                    'hallo_world'.tr,
                     style: TextStyle(
                       fontSize: 24,
                       color: themeC.isDarkMode.value
@@ -156,9 +158,10 @@ class FFontView extends GetView<SettingController> {
                       onPressed: () {
                         themeC.saveFont();
                         Get.back();
-                        cSnackBar('info', 'Font Changed Successfully');
+                        cSnackBar('notification'.tr,
+                            '${'change_font'.tr} ${'successfully'.tr}');
                       },
-                      child: const Text('Confirm Font'),
+                      child: Text('confirm'.tr),
                     ),
                   ],
                 )),

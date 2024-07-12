@@ -82,11 +82,12 @@ class FLanguageView extends GetView<SettingController> {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        themeC.saveFont();
+                        themeC.saveLanguage();
                         Get.back();
-                        cSnackBar('info', 'Font Changed Successfully');
+                        cSnackBar('notification'.tr,
+                            '${'change_language'.tr} ${'successfully'.tr}');
                       },
-                      child: const Text('Confirm Font'),
+                      child: Text('confirm'.tr),
                     ),
                   ],
                 )),

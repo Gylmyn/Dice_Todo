@@ -8,27 +8,35 @@ import 'app/routes/app_pages.dart';
 Future<void> main() async {
   await Hive.initFlutter();
   await Hive.openBox('myBox');
+  Get.lazyPut<ThemeController>(() => ThemeController());
   runApp(const Main());
 }
 
-class Main extends StatelessWidget {
+class Main extends GetView<ThemeController> {
   const Main({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final ThemeController themeC = Get.put(ThemeController());
     return Obx(() => GetMaterialApp(
-          theme: themeC.getLightTheme(),
-          darkTheme: themeC.getDarkTheme(),
-          themeMode: themeC.isDarkMode.value ? ThemeMode.dark : ThemeMode.light,
+          theme: controller.getLightTheme(),
+          darkTheme: controller.getDarkTheme(),
+          themeMode: _theTheme(),
           debugShowCheckedModeBanner: false,
           title: "Dice Todo",
           translations: Messages(),
-          locale: Locale(themeC.selectedLanguage.value.split('_')[0],
-              themeC.selectedLanguage.value.split('_')[1]),
+          locale: _theLocale(),
           fallbackLocale: const Locale('en', 'US'),
           initialRoute: AppPages.INITIAL,
           getPages: AppPages.routes,
         ));
+  }
+
+  ThemeMode _theTheme() {
+    return controller.isDarkMode.value ? ThemeMode.dark : ThemeMode.light;
+  }
+
+  Locale _theLocale() {
+    return Locale(controller.selectedLanguage.value.split('_')[0],
+        controller.selectedLanguage.value.split('_')[1]);
   }
 }

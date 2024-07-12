@@ -9,6 +9,8 @@ import 'package:intl/intl.dart';
 
 class HomeController extends GetxController {
   RxList toDoList = [].obs;
+  RxList toDoSugesstion =
+      ['Do Homework ?', 'Go To Campus ?', 'Go Healing ?'].obs;
   late TextEditingController taskController;
   RxString currentTime = ''.obs;
 
@@ -61,6 +63,10 @@ class HomeController extends GetxController {
     toDoList.value = _myBox.get("TODOLIST");
   }
 
+  void accSugesstion(int index) {
+    taskController.text = toDoSugesstion[index];
+  }
+
   // update the database
   void updateDataBase() {
     _myBox.put("TODOLIST", toDoList.toList());
@@ -74,9 +80,9 @@ class HomeController extends GetxController {
 
   void saveNewTask() {
     toDoList.add([taskController.text, false]);
+    updateDataBase();
     taskController.clear();
     Get.back();
-    updateDataBase();
   }
 
   void deleteTask(int index) {

@@ -23,7 +23,6 @@ class ThemeController extends GetxController {
 
   void changeLanguage(String languageCode) {
     selectedLanguage.value = languageCode;
-    Hive.box('myBox').put('selectedLanguage', languageCode);
     Get.updateLocale(
         Locale(languageCode.split('_')[0], languageCode.split('_')[1]));
   }
@@ -40,6 +39,10 @@ class ThemeController extends GetxController {
 
   void saveFont() {
     Hive.box('myBox').put('selectedFont', selectedFont.value);
+  }
+
+  void saveLanguage() {
+    Hive.box('myBox').put('selectedLanguage', selectedLanguage.value);
   }
 
   ThemeData getLightTheme() {

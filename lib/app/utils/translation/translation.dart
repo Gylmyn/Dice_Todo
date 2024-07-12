@@ -16,6 +16,10 @@ class Messages extends Translations {
           'exit': 'Exit',
           'calender': 'Calender',
           'clock': 'Clock',
+          'notification': 'Notification',
+          'successfully': 'Successfully',
+          'preview': 'Preview',
+          'hallo_world': '< Hallo World />',
         },
         'id_ID': {
           'title': 'Aplikasi',
@@ -30,6 +34,10 @@ class Messages extends Translations {
           'exit': 'Keluar',
           'calender': 'Kalender',
           'clock': 'Jam',
+          'notification': 'Pemberitahuan',
+          'successfully': 'Berhasil',
+          'preview': 'Pratinjau',
+          'hallo_world': '< Hallo Dunia />',
         },
       };
 }

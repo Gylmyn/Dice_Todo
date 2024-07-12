@@ -1,4 +1,6 @@
 import 'package:dice_todo/app/components/dialog.dart';
+import 'package:dice_todo/app/components/label.dart';
+import 'package:dice_todo/app/components/text_field.dart';
 import 'package:dice_todo/app/components/todo_tile.dart';
 import 'package:dice_todo/app/routes/app_pages.dart';
 import 'package:dice_todo/app/utils/datetime/date_time.dart';
@@ -14,32 +16,71 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     final themeC = Get.find<ThemeController>();
+    // void createNewTask() {
+    //   showDialog(
+    //     context: context,
+    //     builder: (context) {
+    //       return DialogBox(
+    //         taskcontroller: controller.taskController,
+    //         onSave: controller.saveNewTask,
+    //         onCancel: () => Navigator.of(context).pop(),
+    //       );
+    //     },
+    //   );
+    // }
+
     void createNewTask() {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return DialogBox(
-            controller: controller.taskController,
+      Get.bottomSheet(
+          backgroundColor: themeC.isDarkMode.value
+              ? Colors.grey.shade800
+              : Colors.grey.shade200,
+          DialogBox(
+            taskcontroller: controller.taskController,
             onSave: controller.saveNewTask,
             onCancel: () => Navigator.of(context).pop(),
-          );
-        },
-      );
+          ));
     }
 
     return Scaffold(
         drawer: _buildDrawer(themeC, controller),
         appBar: _buildAppBar(themeC),
-        body: Obx(() => ListView.builder(
-              itemCount: controller.toDoList.length,
-              itemBuilder: (context, index) {
-                return ToDoTile(
-                  taskName: controller.toDoList[index][0],
-                  taskCompleted: controller.toDoList[index][1],
-                  onChanged: (value) => controller.checkBoxChanged(index),
-                  deleteFunction: (context) => controller.deleteTask(index),
-                );
-              },
+        body: Obx(() => Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // const MyLabel(
+                //   label: 'Search',
+                // ),
+                const Gap(6),
+                const Padding(
+                  padding: EdgeInsets.only(
+                    left: 25.0,
+                    right: 25,
+                  ),
+                  child: MyTextField(
+                    hintText: 'Search Task...',
+                    suffixIcon: Icon(Icons.search),
+                  ),
+                ),
+                const Gap(20),
+                const MyLabel(
+                  label: 'Task',
+                ),
+                const Gap(6),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: controller.toDoList.length,
+                    itemBuilder: (context, index) {
+                      return ToDoTile(
+                        taskName: controller.toDoList[index][0],
+                        taskCompleted: controller.toDoList[index][1],
+                        onChanged: (value) => controller.checkBoxChanged(index),
+                        deleteFunction: (context) =>
+                            controller.deleteTask(index),
+                      );
+                    },
+                  ),
+                ),
+              ],
             )),
         floatingActionButton: FloatingActionButton(
           onPressed: createNewTask,
@@ -80,7 +121,10 @@ Drawer _buildDrawer(ThemeController themeC, HomeController controller) {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Center(
-                child: Image.asset('assets/logo-img.png'),
+                child: Image.asset(
+                  'assets/logo-img.png',
+                  filterQuality: FilterQuality.high,
+                ),
               ),
             ),
             const Gap(12),

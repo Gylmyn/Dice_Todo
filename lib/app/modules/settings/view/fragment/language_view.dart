@@ -2,6 +2,7 @@ import 'package:dice_todo/app/modules/settings/controllers/setting_controller.da
 import 'package:dice_todo/app/utils/snackbar/snackbar.dart';
 import 'package:dice_todo/app/utils/theme/controller.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
 class FLanguageView extends GetView<SettingController> {
@@ -12,6 +13,17 @@ class FLanguageView extends GetView<SettingController> {
     final themeC = Get.find<ThemeController>();
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+            onPressed: () {
+              Get.back();
+              themeC.isConfirm.value
+                  ? cSnackBar2('notification'.tr,
+                      '${'change_language'.tr} ${'successfully'.tr}',
+                      snackPosition: SnackPosition.BOTTOM)
+                  : null;
+              themeC.isConfirm.value = false;
+            },
+            icon: const Icon(Icons.arrow_back)),
         title: Text('change_language'.tr),
         centerTitle: true,
         actions: const [],
@@ -28,69 +40,59 @@ class FLanguageView extends GetView<SettingController> {
               borderRadius: BorderRadius.circular(12),
             ),
             child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Obx(() => Text(
-                        'Preview Font : ${themeC.selectedFont.value}',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: themeC.isDarkMode.value
-                              ? Colors.grey.shade300
-                              : Colors.grey.shade900,
-                        ),
-                      )),
-                  Text(
-                    '< Hallo World />',
-                    style: TextStyle(
-                      fontSize: 24,
-                      color: themeC.isDarkMode.value
-                          ? Colors.grey.shade300
-                          : Colors.grey.shade900,
-                    ),
-                  ),
-                ],
+              child: Text(
+                'hallo_world'.tr,
+                style: TextStyle(
+                  fontSize: 24,
+                  color: themeC.isDarkMode.value
+                      ? Colors.grey.shade300
+                      : Colors.grey.shade900,
+                ),
               ),
             ),
           ),
+          const Gap(16),
           Expanded(
-            child: Obx(() => ListView(
-                  children: [
-                    ListTile(
-                      title: const Text('English'),
-                      leading: Radio<String>(
-                        value: 'en_US',
-                        groupValue: themeC.selectedLanguage.value,
-                        onChanged: (String? value) {
-                          if (value != null) {
-                            themeC.changeLanguage(value);
-                          }
-                        },
+            child: ListView.builder(
+              itemCount: controller.languagesValue.length,
+              itemBuilder: (BuildContext context, int index) {
+                final List<String> langValue = controller.languagesValue[index];
+                return Obx(() => Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 6),
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 6),
+                      height: 80,
+                      decoration: BoxDecoration(
+                        color: themeC.isDarkMode.value
+                            ? Colors.grey.shade900
+                            : Colors.grey.shade300,
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                    ),
-                    ListTile(
-                      title: const Text('Bahasa Indonesia'),
-                      leading: Radio<String>(
-                        value: 'id_ID',
-                        groupValue: themeC.selectedLanguage.value,
-                        onChanged: (String? value) {
-                          if (value != null) {
-                            themeC.changeLanguage(value);
-                          }
-                        },
+                      child: Row(
+                        children: [
+                          Radio<String>(
+                            value: langValue[1],
+                            groupValue: themeC.selectedLanguage.value,
+                            onChanged: (String? value) {
+                              if (value != null) {
+                                themeC.changeLanguage(value);
+                                themeC.isConfirm.value = true;
+                                themeC.saveLanguage();
+                              }
+                            },
+                          ),
+                          Text(langValue[0],
+                              style: TextStyle(
+                                  color: themeC.isDarkMode.value
+                                      ? Colors.white
+                                      : Colors.black,
+                                  fontSize: 18)),
+                        ],
                       ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        themeC.saveLanguage();
-                        Get.back();
-                        cSnackBar('notification'.tr,
-                            '${'change_language'.tr} ${'successfully'.tr}');
-                      },
-                      child: Text('confirm'.tr),
-                    ),
-                  ],
-                )),
+                    ));
+              },
+            ),
           ),
         ],
       ),

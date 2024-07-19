@@ -2,6 +2,7 @@ import 'package:dice_todo/app/components/text_field.dart';
 import 'package:dice_todo/app/modules/home/controllers/home_controller.dart';
 import 'package:dice_todo/app/utils/theme/controller.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'button.dart';
 
@@ -36,7 +37,7 @@ class DialogBox extends GetView<ThemeController> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(
-                          vertical: 16, horizontal: 20),
+                          vertical: 10, horizontal: 20),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -54,13 +55,31 @@ class DialogBox extends GetView<ThemeController> {
                         ],
                       ),
                     ),
+                    const Divider(
+                      thickness: 2,
+                      endIndent: 24,
+                      indent: 24,
+                    ),
                     Expanded(
                         child: Obx(() => ListView.builder(
                             itemCount: homeC.toDoSugesstion.length,
                             itemBuilder: (BuildContext context, int index) {
-                              return Obx(() => ListTile(
-                                  title: Text(homeC.toDoSugesstion[index]),
-                                  onTap: () => homeC.accSugesstion(index)));
+                              return Obx(() => Column(
+                                    children: [
+                                      ListTile(
+                                          contentPadding: const EdgeInsets.only(
+                                            left: 24,
+                                          ),
+                                          title:
+                                              Text(homeC.toDoSugesstion[index]),
+                                          onTap: () =>
+                                              homeC.accSugesstion(index)),
+                                      const Divider(
+                                        endIndent: 24,
+                                        indent: 24,
+                                      ),
+                                    ],
+                                  ));
                             })))
                   ],
                 ),
@@ -74,8 +93,9 @@ class DialogBox extends GetView<ThemeController> {
                       child: MyTextField(
                           hintText: 'Enter Task',
                           fieldController: taskcontroller)),
+                  const Gap(6),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    padding: const EdgeInsets.only(right: 2),
                     child: MyButton(
                       useIcon: true,
                       icon: const Icon(Icons.send_rounded),

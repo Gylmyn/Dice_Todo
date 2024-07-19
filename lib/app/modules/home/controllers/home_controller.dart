@@ -1,11 +1,9 @@
-import 'dart:async';
 import 'dart:io';
-
+import 'package:dice_todo/app/data/hive/hive_storage.dart';
+import 'package:dice_todo/app/utils/snackbar/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:intl/intl.dart';
 
 class HomeController extends GetxController {
   RxList toDoList = [].obs;
@@ -18,11 +16,11 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
     taskController = TextEditingController();
-    updateCurrentTime();
-    Timer.periodic(const Duration(seconds: 1), (Timer t) {
-      updateCurrentTime();
-    });
-    if (_myBox.get("TODOLIST") == null) {
+    // updateCurrentTime();
+    // Timer.periodic(const Duration(seconds: 1), (Timer t) {
+    //   updateCurrentTime();
+    // });
+    if (HiveLStorage.loadBox("TODOLIST") == null) {
       createInitialData();
     } else {
       loadData();
@@ -36,7 +34,7 @@ class HomeController extends GetxController {
   }
 
   // reference our box
-  final _myBox = Hive.box('mybox');
+  // final Box<dynamic> _myBox = HiveLStorage.refrenceBox();
 
   // run this method if this is the 1st time ever opening this app
   void createInitialData() {
@@ -53,14 +51,14 @@ class HomeController extends GetxController {
     }
   }
 
-  void updateCurrentTime() {
-    final now = DateTime.now();
-    currentTime.value = DateFormat('HH:mm:ss').format(now);
-  }
+  // void updateCurrentTime() {
+  //   final now = DateTime.now();
+  //   currentTime.value = DateFormat('HH:mm:ss').format(now);
+  // }
 
   // load the data from database
   void loadData() {
-    toDoList.value = _myBox.get("TODOLIST");
+    toDoList.value = HiveLStorage.loadBox("TODOLIST");
   }
 
   void accSugesstion(int index) {
@@ -69,7 +67,7 @@ class HomeController extends GetxController {
 
   // update the database
   void updateDataBase() {
-    _myBox.put("TODOLIST", toDoList.toList());
+    HiveLStorage.updateBox("TODOLIST", toDoList.toList());
   }
 
   void checkBoxChanged(int index) {
@@ -83,6 +81,8 @@ class HomeController extends GetxController {
     updateDataBase();
     taskController.clear();
     Get.back();
+    cSnackBar2('notification'.tr, '${'successfully'.tr} , ${'task_added'.tr}',
+        snackPosition: SnackPosition.TOP);
   }
 
   void deleteTask(int index) {

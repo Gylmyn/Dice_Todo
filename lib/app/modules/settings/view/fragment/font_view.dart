@@ -11,163 +11,106 @@ class FFontView extends GetView<SettingController> {
   @override
   Widget build(BuildContext context) {
     final themeC = Get.find<ThemeController>();
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('change_font'.tr),
-        centerTitle: true,
-        actions: const [],
-      ),
-      body: Column(
-        children: [
-          Container(
-            height: 200,
-            margin: const EdgeInsets.symmetric(horizontal: 16),
-            decoration: BoxDecoration(
-              color: themeC.isDarkMode.value
-                  ? Colors.grey.shade900
-                  : Colors.grey.shade300,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Obx(() => Text(
-                        '${'preview'.tr} Font : ${themeC.selectedFont.value}',
+    return Obx(() => Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+                onPressed: () {
+                  Get.back();
+                  themeC.isConfirm.value
+                      ? cSnackBar2('notification'.tr,
+                          '${'change_font'.tr} ${'successfully'.tr}',
+                          snackPosition: SnackPosition.BOTTOM)
+                      : null;
+                  themeC.isConfirm.value = false;
+                },
+                icon: const Icon(Icons.arrow_back)),
+            title: Text('change_font'.tr),
+            centerTitle: true,
+            actions: const [],
+          ),
+          body: Column(
+            children: [
+              Container(
+                height: 200,
+                margin: const EdgeInsets.symmetric(horizontal: 16),
+                decoration: BoxDecoration(
+                  color: themeC.isDarkMode.value
+                      ? Colors.grey.shade900
+                      : Colors.grey.shade300,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Obx(() => Text(
+                            '${'preview'.tr} Font : ${themeC.selectedFont.value}',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: themeC.isDarkMode.value
+                                  ? Colors.grey.shade300
+                                  : Colors.grey.shade900,
+                            ),
+                          )),
+                      const Gap(4),
+                      Text(
+                        'hallo_world'.tr,
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 24,
                           color: themeC.isDarkMode.value
                               ? Colors.grey.shade300
                               : Colors.grey.shade900,
                         ),
-                      )),
-                  const Gap(4),
-                  Text(
-                    'hallo_world'.tr,
-                    style: TextStyle(
-                      fontSize: 24,
-                      color: themeC.isDarkMode.value
-                          ? Colors.grey.shade300
-                          : Colors.grey.shade900,
-                    ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
-            ),
+              const Gap(16),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: controller.fontsValue.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final String fontValue = controller.fontsValue[index];
+                    return Obx(() => Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 6),
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 6),
+                          height: 80,
+                          decoration: BoxDecoration(
+                            color: themeC.isDarkMode.value
+                                ? Colors.grey.shade900
+                                : Colors.grey.shade300,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Row(
+                            children: [
+                              Radio<String>(
+                                value: fontValue,
+                                groupValue: themeC.selectedFont.value,
+                                onChanged: (String? value) {
+                                  if (value != null) {
+                                    themeC.changeFont(value);
+                                    themeC.isConfirm.value = true;
+                                    themeC.saveFont();
+                                  }
+                                },
+                              ),
+                              Text(fontValue,
+                                  style: TextStyle(
+                                      color: themeC.isDarkMode.value
+                                          ? Colors.white
+                                          : Colors.black,
+                                      fontSize: 18)),
+                            ],
+                          ),
+                        ));
+                  },
+                ),
+              ),
+            ],
           ),
-          Expanded(
-            child: Obx(() => ListView(
-                  children: [
-                    ListTile(
-                      title: const Text('Montserrat'),
-                      leading: Radio<String>(
-                        value: 'Montserrat',
-                        groupValue: themeC.selectedFont.value,
-                        onChanged: (String? value) {
-                          if (value != null) {
-                            themeC.changeFont(value);
-                          }
-                        },
-                      ),
-                    ),
-                    ListTile(
-                      title: const Text('Raleway'),
-                      leading: Radio<String>(
-                        value: 'Raleway',
-                        groupValue: themeC.selectedFont.value,
-                        onChanged: (String? value) {
-                          if (value != null) {
-                            themeC.changeFont(value);
-                          }
-                        },
-                      ),
-                    ),
-                    ListTile(
-                      title: const Text('Nunito'),
-                      leading: Radio<String>(
-                        value: 'Nunito',
-                        groupValue: themeC.selectedFont.value,
-                        onChanged: (String? value) {
-                          if (value != null) {
-                            themeC.changeFont(value);
-                          }
-                        },
-                      ),
-                    ),
-                    ListTile(
-                      title: const Text('Poppins'),
-                      leading: Radio<String>(
-                        value: 'Poppins',
-                        groupValue: themeC.selectedFont.value,
-                        onChanged: (String? value) {
-                          if (value != null) {
-                            themeC.changeFont(value);
-                          }
-                        },
-                      ),
-                    ),
-                    ListTile(
-                      title: const Text('Roboto'),
-                      leading: Radio<String>(
-                        value: 'Roboto',
-                        groupValue: themeC.selectedFont.value,
-                        onChanged: (String? value) {
-                          if (value != null) {
-                            themeC.changeFont(value);
-                          }
-                        },
-                      ),
-                    ),
-                    ListTile(
-                      title: const Text('Open Sans'),
-                      leading: Radio<String>(
-                        value: 'Open Sans',
-                        groupValue: themeC.selectedFont.value,
-                        onChanged: (String? value) {
-                          if (value != null) {
-                            themeC.changeFont(value);
-                          }
-                        },
-                      ),
-                    ),
-                    ListTile(
-                      title: const Text('Lato'),
-                      leading: Radio<String>(
-                        value: 'Lato',
-                        groupValue: themeC.selectedFont.value,
-                        onChanged: (String? value) {
-                          if (value != null) {
-                            themeC.changeFont(value);
-                          }
-                        },
-                      ),
-                    ),
-                    ListTile(
-                      title: const Text('Comic Neue'),
-                      leading: Radio<String>(
-                        value: 'Comic Neue',
-                        groupValue: themeC.selectedFont.value,
-                        onChanged: (String? value) {
-                          if (value != null) {
-                            themeC.changeFont(value);
-                          }
-                        },
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        themeC.saveFont();
-                        Get.back();
-                        cSnackBar('notification'.tr,
-                            '${'change_font'.tr} ${'successfully'.tr}');
-                      },
-                      child: Text('confirm'.tr),
-                    ),
-                  ],
-                )),
-          ),
-        ],
-      ),
-    );
+        ));
   }
 }

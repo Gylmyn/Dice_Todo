@@ -1,10 +1,11 @@
+import 'package:dice_todo/app/data/hive/hive_storage.dart';
 import 'package:dice_todo/app/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
 
 class ThemeController extends GetxController {
   RxBool isDarkMode = false.obs;
+  RxBool isConfirm = false.obs;
   RxString selectedFont = ''.obs;
   RxString selectedLanguage = ''.obs;
 
@@ -12,12 +13,12 @@ class ThemeController extends GetxController {
   void onInit() {
     super.onInit();
     selectedLanguage.value =
-        Hive.box('myBox').get('selectedLanguage', defaultValue: 'en_US');
+        HiveLStorage.loadBox('selectedLanguage', defaultValue: 'en_US');
     Get.updateLocale(Locale(selectedLanguage.value.split('_')[0],
         selectedLanguage.value.split('_')[1]));
-    isDarkMode.value = Hive.box('myBox').get('isDarkMode', defaultValue: false);
+    isDarkMode.value = HiveLStorage.loadBox('isDarkMode', defaultValue: false);
     selectedFont.value =
-        Hive.box('myBox').get('selectedFont', defaultValue: 'Lato');
+        HiveLStorage.loadBox('selectedFont', defaultValue: 'Lato');
     Get.changeThemeMode(isDarkMode.value ? ThemeMode.dark : ThemeMode.light);
   }
 
@@ -29,7 +30,7 @@ class ThemeController extends GetxController {
 
   void toggleTheme() {
     isDarkMode.value = !isDarkMode.value;
-    Hive.box('myBox').put('isDarkMode', isDarkMode.value);
+    HiveLStorage.updateBox('isDarkMode', isDarkMode.value);
     Get.changeThemeMode(isDarkMode.value ? ThemeMode.dark : ThemeMode.light);
   }
 
@@ -38,11 +39,11 @@ class ThemeController extends GetxController {
   }
 
   void saveFont() {
-    Hive.box('myBox').put('selectedFont', selectedFont.value);
+    HiveLStorage.updateBox('selectedFont', selectedFont.value);
   }
 
   void saveLanguage() {
-    Hive.box('myBox').put('selectedLanguage', selectedLanguage.value);
+    HiveLStorage.updateBox('selectedLanguage', selectedLanguage.value);
   }
 
   ThemeData getLightTheme() {

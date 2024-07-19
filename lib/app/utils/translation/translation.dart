@@ -20,6 +20,7 @@ class Messages extends Translations {
           'successfully': 'Successfully',
           'preview': 'Preview',
           'hallo_world': '< Hallo World />',
+          'task_added': 'Added Task',
         },
         'id_ID': {
           'title': 'Aplikasi',
@@ -38,6 +39,7 @@ class Messages extends Translations {
           'successfully': 'Berhasil',
           'preview': 'Pratinjau',
           'hallo_world': '< Hallo Dunia />',
+          'task_added': 'Tugas Ditambahkan',
         },
       };
 }

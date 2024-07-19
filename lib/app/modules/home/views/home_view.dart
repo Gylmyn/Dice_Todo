@@ -3,7 +3,6 @@ import 'package:dice_todo/app/components/label.dart';
 import 'package:dice_todo/app/components/text_field.dart';
 import 'package:dice_todo/app/components/todo_tile.dart';
 import 'package:dice_todo/app/routes/app_pages.dart';
-import 'package:dice_todo/app/utils/datetime/date_time.dart';
 import 'package:dice_todo/app/utils/theme/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -16,19 +15,6 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     final themeC = Get.find<ThemeController>();
-    // void createNewTask() {
-    //   showDialog(
-    //     context: context,
-    //     builder: (context) {
-    //       return DialogBox(
-    //         taskcontroller: controller.taskController,
-    //         onSave: controller.saveNewTask,
-    //         onCancel: () => Navigator.of(context).pop(),
-    //       );
-    //     },
-    //   );
-    // }
-
     void createNewTask() {
       Get.bottomSheet(
           backgroundColor: themeC.isDarkMode.value
@@ -37,7 +23,7 @@ class HomeView extends GetView<HomeController> {
           DialogBox(
             taskcontroller: controller.taskController,
             onSave: controller.saveNewTask,
-            onCancel: () => Navigator.of(context).pop(),
+            onCancel: () => Get.back(),
           ));
     }
 
@@ -57,7 +43,7 @@ class HomeView extends GetView<HomeController> {
                     right: 25,
                   ),
                   child: MyTextField(
-                    hintText: 'Search Task...',
+                    hintText: 'Search The Task... ',
                     suffixIcon: Icon(Icons.search),
                   ),
                 ),
@@ -67,22 +53,48 @@ class HomeView extends GetView<HomeController> {
                 ),
                 const Gap(6),
                 Expanded(
-                  child: ListView.builder(
-                    itemCount: controller.toDoList.length,
-                    itemBuilder: (context, index) {
-                      return ToDoTile(
-                        taskName: controller.toDoList[index][0],
-                        taskCompleted: controller.toDoList[index][1],
-                        onChanged: (value) => controller.checkBoxChanged(index),
-                        deleteFunction: (context) =>
-                            controller.deleteTask(index),
-                      );
-                    },
-                  ),
-                ),
+                    child: controller.toDoList.isNotEmpty
+                        ? ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: controller.toDoList.length,
+                            itemBuilder: (context, index) {
+                              return ToDoTile(
+                                taskName: controller.toDoList[index][0],
+                                taskCompleted: controller.toDoList[index][1],
+                                onChanged: (value) =>
+                                    controller.checkBoxChanged(index),
+                                deleteFunction: (context) =>
+                                    controller.deleteTask(index),
+                              );
+                            },
+                          )
+                        : Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(
+                                  Icons.menu_book_rounded,
+                                  size: 60,
+                                ),
+                                const Gap(6),
+                                Text(
+                                  'No Task Found',
+                                  style: TextStyle(
+                                    color: themeC.isDarkMode.value
+                                        ? Colors.grey.shade300
+                                        : Colors.grey.shade900,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )),
               ],
             )),
         floatingActionButton: FloatingActionButton(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
+          // backgroundColor: Colors.amberAccent,
           onPressed: createNewTask,
           child: const Icon(Icons.add),
         ));
@@ -91,7 +103,7 @@ class HomeView extends GetView<HomeController> {
 
 AppBar _buildAppBar(ThemeController themeC) {
   return AppBar(
-    title: const Text('DiceTodo'),
+    title: const Text('ToDice'),
     centerTitle: true,
     actions: [
       IconButton(
@@ -113,20 +125,47 @@ Drawer _buildDrawer(ThemeController themeC, HomeController controller) {
           children: [
             const Gap(12),
             Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16),
-              decoration: BoxDecoration(
-                color: themeC.isDarkMode.value
-                    ? Colors.grey.shade900
-                    : Colors.grey.shade300,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Center(
-                child: Image.asset(
-                  'assets/logo-img.png',
-                  filterQuality: FilterQuality.high,
+                height: 300,
+                margin: const EdgeInsets.symmetric(horizontal: 16),
+                decoration: BoxDecoration(
+                  color: themeC.isDarkMode.value
+                      ? Colors.grey.shade900
+                      : Colors.grey.shade300,
+                  borderRadius: BorderRadius.circular(12),
+                  image: const DecorationImage(
+                      image: AssetImage('assets/logo-img.png'),
+                      fit: BoxFit.cover),
                 ),
-              ),
-            ),
+                child: Stack(
+                  children: [
+                    Positioned(
+                      top: 10,
+                      left: 10,
+                      child: Text(
+                        'ToDice',
+                        style: TextStyle(
+                          fontSize: 24,
+                          color: themeC.isDarkMode.value
+                              ? Colors.grey.shade300
+                              : Colors.grey.shade900,
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 10,
+                      right: 10,
+                      child: Text(
+                        'v1.0.0',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: themeC.isDarkMode.value
+                              ? Colors.grey.shade300
+                              : Colors.grey.shade900,
+                        ),
+                      ),
+                    ),
+                  ],
+                )),
             const Gap(12),
             SizedBox(
               height: 160,

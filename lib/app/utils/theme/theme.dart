@@ -4,6 +4,12 @@ import 'package:google_fonts/google_fonts.dart';
 class ThemeUtils {
   static ThemeData getLightTheme(String font) {
     return ThemeData(
+      colorScheme: const ColorScheme.light(primary: Colors.black),
+      useMaterial3: true,
+      appBarTheme: const AppBarTheme(
+        scrolledUnderElevation: 0,
+        backgroundColor: Colors.transparent,
+      ),
       brightness: Brightness.light,
       textTheme: _getTextTheme(font),
       // Tambahkan properti tema lainnya sesuai kebutuhan
@@ -12,6 +18,12 @@ class ThemeUtils {
 
   static ThemeData getDarkTheme(String font) {
     return ThemeData(
+      colorScheme: const ColorScheme.dark(primary: Colors.white),
+      useMaterial3: true,
+      appBarTheme: const AppBarTheme(
+        scrolledUnderElevation: 0,
+        backgroundColor: Colors.transparent,
+      ),
       brightness: Brightness.dark,
       textTheme: _getTextTheme(font),
       // Tambahkan properti tema lainnya sesuai kebutuhan

@@ -8,10 +8,12 @@ abstract class Routes {
   static const SETTINGS = _Paths.SETTINGS;
   static const FLANGUAGE = _Paths.FLANGUAGE;
   static const FFONT = _Paths.FFONT;
+  static const SPLASH = _Paths.SPLASH;
 }
 
 abstract class _Paths {
   _Paths._();
+  static const SPLASH = '/';
   static const HOME = '/home';
   static const SETTINGS = '/settings';
   static const FLANGUAGE = '$SETTINGS/language';
